@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "625598359091",
+    "project_id": "udanpani-98b17",
+    "storage_bucket": "udanpani-98b17.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:625598359091:android:0b9d3fe7ad6a610e786546",
+        "android_client_info": {
+          "package_name": "com.udanpani.udanpani"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "625598359091-qctuib1ufot6qq7ti76jr63ro1c4slmu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB9RqJFQcCGsIfIaQewcoOKL8SCPI6BQgQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "625598359091-qctuib1ufot6qq7ti76jr63ro1c4slmu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
