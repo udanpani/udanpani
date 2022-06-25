@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:udanpani/core/colors.dart';
-import 'package:udanpani/domain/models/user.dart';
+import 'package:udanpani/domain/models/user_model/user.dart';
 import 'package:udanpani/infrastructure/utils.dart';
 import 'package:udanpani/services/auth_methods.dart';
 import 'package:udanpani/widgets/text_input_field.dart';

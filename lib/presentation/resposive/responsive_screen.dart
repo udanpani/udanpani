@@ -1,9 +1,10 @@
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 import 'package:udanpani/core/constants.dart';
 
-class ResponsiveLayout extends StatelessWidget {
+class ResponsiveLayout extends StatefulWidget {
   const ResponsiveLayout({
     Key? key,
     required this.webScreenLayout,
@@ -14,13 +15,23 @@ class ResponsiveLayout extends StatelessWidget {
   final mobileScreenLayout;
 
   @override
+  State<ResponsiveLayout> createState() => _ResponsiveLayoutState();
+}
+
+class _ResponsiveLayoutState extends State<ResponsiveLayout> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: ((context, constraints) {
         if (constraints.maxWidth > webScreenWidth) {
-          return webScreenLayout;
+          return widget.webScreenLayout;
         }
-        return mobileScreenLayout;
+        return widget.mobileScreenLayout;
       }),
     );
   }

@@ -10,10 +10,25 @@ class StorageMethods {
   Future<String> uploadImageToStorage(
     String childName,
     Uint8List file,
-    bool isPost,
   ) async {
     Reference ref =
         _storage.ref().child(childName).child(_auth.currentUser!.uid);
+    UploadTask uploadTask = ref.putData(file);
+
+    TaskSnapshot snap = await uploadTask;
+    String downloadUrl = await snap.ref.getDownloadURL();
+
+    return downloadUrl;
+  }
+
+  //todo implement multiple photos in post
+  Future<String> uploadJobImageToStorage(
+    String childName,
+    Uint8List file,
+    String postID,
+  ) async {
+    Reference ref = _storage.ref().child(childName).child(postID);
+
     UploadTask uploadTask = ref.putData(file);
 
     TaskSnapshot snap = await uploadTask;
