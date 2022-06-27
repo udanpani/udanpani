@@ -8,7 +8,6 @@ class User with _$User {
   factory User({
     required String username,
     required String email,
-    required String password,
     String? profilePicture,
   }) = _User;
 

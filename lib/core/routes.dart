@@ -7,6 +7,7 @@ import 'package:udanpani/presentation/resposive/mobile_layout.dart';
 import 'package:udanpani/presentation/resposive/responsive_screen.dart';
 import 'package:udanpani/presentation/resposive/web_screen_layout.dart';
 import 'package:udanpani/presentation/screens/auth_pages/signup_screen.dart';
+import 'package:udanpani/presentation/screens/job_details_screen.dart';
 
 class Routes {
   static Map<String, WidgetBuilder> routes = {
@@ -16,6 +17,7 @@ class Routes {
         ),
     '/login': (context) => const LoginScreen(),
     '/signup': (context) => const SignUpScreen(),
+    '/job': (context) => JobDetailsScreen(),
     '/upload': (context) => const AddNewJobScreen(),
   };
 }

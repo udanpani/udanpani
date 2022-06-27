@@ -31,10 +31,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   Future<void> _selectImage() async {
-    Uint8List im = await pickImage(ImageSource.gallery);
+    Uint8List? im = await pickImage(ImageSource.gallery);
 
     setState(() {
-      _image = im;
+      if (im != null) {
+        _image = im;
+      }
     });
   }
 
@@ -47,8 +49,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
       user: User(
         username: _usernameEditingController.text,
         email: _emailEditingController.text,
-        password: _passwordEditingController.text,
       ),
+      password: _passwordEditingController.text,
       file: _image,
     );
 
@@ -63,7 +65,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   void _navigateToLogin() {
-    Navigator.pushNamed(context, '/login');
+    Navigator.pushReplacementNamed(context, '/login');
   }
 
   @override
@@ -97,7 +99,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     height: 50,
                     child: FloatingActionButton(
                       onPressed: _selectImage,
-                      child: Icon(Icons.add_a_photo),
+                      child: const Icon(Icons.add_a_photo),
                     ),
                   )
                 ],

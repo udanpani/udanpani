@@ -23,8 +23,8 @@ mixin _$Job {
   String get title => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
   String get posterUid => throw _privateConstructorUsedError;
-  String get locX => throw _privateConstructorUsedError;
-  String get locY => throw _privateConstructorUsedError;
+  String? get photoUrl => throw _privateConstructorUsedError;
+  dynamic get geoHash => throw _privateConstructorUsedError;
   List<String>? get applicants => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -40,8 +40,8 @@ abstract class $JobCopyWith<$Res> {
       {String title,
       String description,
       String posterUid,
-      String locX,
-      String locY,
+      String? photoUrl,
+      dynamic geoHash,
       List<String>? applicants});
 }
 
@@ -58,8 +58,8 @@ class _$JobCopyWithImpl<$Res> implements $JobCopyWith<$Res> {
     Object? title = freezed,
     Object? description = freezed,
     Object? posterUid = freezed,
-    Object? locX = freezed,
-    Object? locY = freezed,
+    Object? photoUrl = freezed,
+    Object? geoHash = freezed,
     Object? applicants = freezed,
   }) {
     return _then(_value.copyWith(
@@ -75,14 +75,14 @@ class _$JobCopyWithImpl<$Res> implements $JobCopyWith<$Res> {
           ? _value.posterUid
           : posterUid // ignore: cast_nullable_to_non_nullable
               as String,
-      locX: locX == freezed
-          ? _value.locX
-          : locX // ignore: cast_nullable_to_non_nullable
-              as String,
-      locY: locY == freezed
-          ? _value.locY
-          : locY // ignore: cast_nullable_to_non_nullable
-              as String,
+      photoUrl: photoUrl == freezed
+          ? _value.photoUrl
+          : photoUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
+      geoHash: geoHash == freezed
+          ? _value.geoHash
+          : geoHash // ignore: cast_nullable_to_non_nullable
+              as dynamic,
       applicants: applicants == freezed
           ? _value.applicants
           : applicants // ignore: cast_nullable_to_non_nullable
@@ -100,8 +100,8 @@ abstract class _$$_JobCopyWith<$Res> implements $JobCopyWith<$Res> {
       {String title,
       String description,
       String posterUid,
-      String locX,
-      String locY,
+      String? photoUrl,
+      dynamic geoHash,
       List<String>? applicants});
 }
 
@@ -119,8 +119,8 @@ class __$$_JobCopyWithImpl<$Res> extends _$JobCopyWithImpl<$Res>
     Object? title = freezed,
     Object? description = freezed,
     Object? posterUid = freezed,
-    Object? locX = freezed,
-    Object? locY = freezed,
+    Object? photoUrl = freezed,
+    Object? geoHash = freezed,
     Object? applicants = freezed,
   }) {
     return _then(_$_Job(
@@ -136,14 +136,14 @@ class __$$_JobCopyWithImpl<$Res> extends _$JobCopyWithImpl<$Res>
           ? _value.posterUid
           : posterUid // ignore: cast_nullable_to_non_nullable
               as String,
-      locX: locX == freezed
-          ? _value.locX
-          : locX // ignore: cast_nullable_to_non_nullable
-              as String,
-      locY: locY == freezed
-          ? _value.locY
-          : locY // ignore: cast_nullable_to_non_nullable
-              as String,
+      photoUrl: photoUrl == freezed
+          ? _value.photoUrl
+          : photoUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
+      geoHash: geoHash == freezed
+          ? _value.geoHash
+          : geoHash // ignore: cast_nullable_to_non_nullable
+              as dynamic,
       applicants: applicants == freezed
           ? _value._applicants
           : applicants // ignore: cast_nullable_to_non_nullable
@@ -159,8 +159,8 @@ class _$_Job implements _Job {
       {required this.title,
       required this.description,
       required this.posterUid,
-      required this.locX,
-      required this.locY,
+      this.photoUrl,
+      required this.geoHash,
       final List<String>? applicants})
       : _applicants = applicants;
 
@@ -173,9 +173,9 @@ class _$_Job implements _Job {
   @override
   final String posterUid;
   @override
-  final String locX;
+  final String? photoUrl;
   @override
-  final String locY;
+  final dynamic geoHash;
   final List<String>? _applicants;
   @override
   List<String>? get applicants {
@@ -187,7 +187,7 @@ class _$_Job implements _Job {
 
   @override
   String toString() {
-    return 'Job(title: $title, description: $description, posterUid: $posterUid, locX: $locX, locY: $locY, applicants: $applicants)';
+    return 'Job(title: $title, description: $description, posterUid: $posterUid, photoUrl: $photoUrl, geoHash: $geoHash, applicants: $applicants)';
   }
 
   @override
@@ -199,8 +199,8 @@ class _$_Job implements _Job {
             const DeepCollectionEquality()
                 .equals(other.description, description) &&
             const DeepCollectionEquality().equals(other.posterUid, posterUid) &&
-            const DeepCollectionEquality().equals(other.locX, locX) &&
-            const DeepCollectionEquality().equals(other.locY, locY) &&
+            const DeepCollectionEquality().equals(other.photoUrl, photoUrl) &&
+            const DeepCollectionEquality().equals(other.geoHash, geoHash) &&
             const DeepCollectionEquality()
                 .equals(other._applicants, _applicants));
   }
@@ -212,8 +212,8 @@ class _$_Job implements _Job {
       const DeepCollectionEquality().hash(title),
       const DeepCollectionEquality().hash(description),
       const DeepCollectionEquality().hash(posterUid),
-      const DeepCollectionEquality().hash(locX),
-      const DeepCollectionEquality().hash(locY),
+      const DeepCollectionEquality().hash(photoUrl),
+      const DeepCollectionEquality().hash(geoHash),
       const DeepCollectionEquality().hash(_applicants));
 
   @JsonKey(ignore: true)
@@ -232,8 +232,8 @@ abstract class _Job implements Job {
       {required final String title,
       required final String description,
       required final String posterUid,
-      required final String locX,
-      required final String locY,
+      final String? photoUrl,
+      required final dynamic geoHash,
       final List<String>? applicants}) = _$_Job;
 
   factory _Job.fromJson(Map<String, dynamic> json) = _$_Job.fromJson;
@@ -245,9 +245,9 @@ abstract class _Job implements Job {
   @override
   String get posterUid => throw _privateConstructorUsedError;
   @override
-  String get locX => throw _privateConstructorUsedError;
+  String? get photoUrl => throw _privateConstructorUsedError;
   @override
-  String get locY => throw _privateConstructorUsedError;
+  dynamic get geoHash => throw _privateConstructorUsedError;
   @override
   List<String>? get applicants => throw _privateConstructorUsedError;
   @override

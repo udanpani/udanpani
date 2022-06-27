@@ -9,8 +9,8 @@ class Job with _$Job {
     required String title,
     required String description,
     required String posterUid,
-    required String locX,
-    required String locY,
+    String? photoUrl,
+    required dynamic geoHash,
     List<String>? applicants,
   }) = _Job;
 

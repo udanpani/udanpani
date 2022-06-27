@@ -17,14 +17,15 @@ class AuthMethods {
     return model.User.fromJson(snap.data() as Map<String, dynamic>);
   }
 
-  Future<String> signUpUser({required model.User user, Uint8List? file}) async {
+  Future<String> signUpUser(
+      {required model.User user,
+      required String password,
+      Uint8List? file}) async {
     String res = "Some error occured";
 
     try {
       UserCredential cred = await _auth.createUserWithEmailAndPassword(
-          email: user.email, password: user.password);
-
-      //todo handle if file is null
+          email: user.email, password: password);
 
       String photoUrl = await StorageMethods().uploadImageToStorage(
         'profilePics',

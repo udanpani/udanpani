@@ -1,9 +1,5 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/widgets.dart';
+import 'package:udanpani/core/colors.dart';
 import 'package:udanpani/infrastructure/utils.dart';
 import 'package:udanpani/services/auth_methods.dart';
 import 'package:udanpani/widgets/text_input_field.dart';
@@ -48,7 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _navigateToSignup() {
-    Navigator.pushNamed(context, '/signup');
+    Navigator.pushReplacementNamed(context, '/signup');
   }
 
   @override
@@ -81,7 +77,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
               ElevatedButton(
                 onPressed: _loginUser,
-                child: const Text("Login"),
+                child: _isLoading
+                    ? const CircularProgressIndicator(
+                        color: primaryColor,
+                      )
+                    : const Text("Login"),
               ),
 
               Row(

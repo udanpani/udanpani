@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/widgets.dart';
 import 'package:udanpani/core/colors.dart';
 
 class WorkAvailable extends StatefulWidget {
@@ -19,17 +16,36 @@ class _WorkAvailableState extends State<WorkAvailable> {
     );
   }
 
+  void showDetails(
+      /* takes in job */ int
+          index /* showing that data is being transferred*/) {
+    Navigator.pushNamed(
+      context,
+      '/job',
+      arguments: index,
+    );
+  }
+
   Widget availableWork() {
-    return ListView.builder(
+    return ListView.separated(
       itemCount: 50,
       itemBuilder: ((context, index) {
         return ListTile(
+          onTap: () {
+            showDetails(index);
+          },
           leading: const CircleAvatar(backgroundColor: primaryColor),
           title: Text("TITLE ${index}"),
           subtitle: const Text("Location"),
           trailing: const Text("000"),
         );
       }),
+      separatorBuilder: ((context, index) => Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30),
+            child: Divider(
+              color: secondaryColor,
+            ),
+          )),
     );
   }
 }
