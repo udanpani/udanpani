@@ -26,7 +26,7 @@ class _JobsListedState extends State<JobsListed> {
 
   Widget _listedJobs() {
     return ListView.builder(
-      itemCount: 5,
+      itemCount: 6,
       itemBuilder: (context, index) => ListTile(
         leading: CircleAvatar(backgroundColor: primaryColor),
         title: Text("Job $index"),
