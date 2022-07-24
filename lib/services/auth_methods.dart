@@ -36,6 +36,15 @@ class AuthMethods {
             user.copyWith(profilePicture: photoUrl).toJson(),
           );
 
+      await _firestore
+          .collection('applications')
+          .doc(_auth.currentUser!.uid)
+          .set(
+        {
+          "jobs_applied": [],
+        },
+      );
+
       res = "success";
     } on FirebaseAuthException catch (fberror) {
       res = fberror.code;
@@ -53,6 +62,20 @@ class AuthMethods {
 
     try {
       await _auth.signInWithEmailAndPassword(email: email, password: password);
+      res = "success";
+    } on FirebaseAuthException catch (fberror) {
+      res = fberror.code;
+    } catch (err) {
+      res = err.toString();
+    }
+    return res;
+  }
+
+  Future<String> signoutUser() async {
+    String res = "Some error occured";
+
+    try {
+      await _auth.signOut();
       res = "success";
     } on FirebaseAuthException catch (fberror) {
       res = fberror.code;

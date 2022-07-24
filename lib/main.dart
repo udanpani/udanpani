@@ -25,8 +25,8 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: mobileBackgroundColor,
       ),
       routes: Routes.routes,
-      // home: JobDetailsScreen(),
 
+      // home: JobDetailsScreen(),
       home: StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {

@@ -27,5 +27,5 @@ List<BottomNavigationBarItem> navItems = [
 List<Widget> pages = [
   const WorkAvailable(),
   const JobsListed(),
-  const ProfileScreen(),
+  ProfileScreen(),
 ];

@@ -148,6 +148,7 @@ class _AddNewJobScreenState extends State<AddNewJobScreen> {
       lon,
     );
 
+    if (!mounted) return;
     setState(() {
       _address = address;
       _locationIcon = const Icon(Icons.my_location, color: blueColor);

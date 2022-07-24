@@ -17,7 +17,6 @@ class Routes {
         ),
     '/login': (context) => const LoginScreen(),
     '/signup': (context) => const SignUpScreen(),
-    '/job': (context) => JobDetailsScreen(),
     '/upload': (context) => const AddNewJobScreen(),
   };
 }

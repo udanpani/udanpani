@@ -1,96 +1,221 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:geoflutterfire/geoflutterfire.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 import 'package:udanpani/core/colors.dart';
+import 'package:udanpani/domain/models/job_model/job.dart';
+import 'package:udanpani/infrastructure/utils.dart';
+import 'package:udanpani/services/firestore_service.dart';
+import 'package:udanpani/services/rest_services.dart';
+import 'package:udanpani/widgets/loadingwidget.dart';
+import 'package:uuid/uuid.dart';
 
 class JobDetailsScreen extends StatefulWidget {
   JobDetailsScreen({
     Key? key,
+    required this.id,
   }) : super(key: key);
+
+  String id;
 
   @override
   State<JobDetailsScreen> createState() => _JobDetailsScreenState();
 }
 
 class _JobDetailsScreenState extends State<JobDetailsScreen> {
-  // Job job;
-  late int index;
+  bool _isLoading = true;
+  Job? _job;
+  bool _alreadyApplied = false;
 
-  Widget _details(/*Job job*/) {
-    return Column(
-      children: [
-        Container(
-          color: mobileSearchColor,
-          height: 250,
-          child: const Image(
-            image: NetworkImage(
-                "https://images.unsplash.com/photo-1558904541-efa843a96f01?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1632&q=80"),
-            fit: BoxFit.cover,
-          ),
+  final _locEditingController = TextEditingController(text: "Searching");
+  Coordinates? _coordinates;
+
+  late GoogleMapController _mapController;
+  final Set<Marker> _mapMarkers = {};
+
+  @override
+  void initState() {
+    super.initState();
+    _getDetails();
+  }
+
+  void _onMapCreated(GoogleMapController controller) {
+    setState(() {
+      _mapController = controller;
+    });
+    if (_mapController != null) {
+      _mapController.animateCamera(CameraUpdate.newLatLngZoom(
+          LatLng(_coordinates!.latitude, _coordinates!.longitude), 18));
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _locEditingController.dispose();
+    _mapController.dispose();
+  }
+
+  void _setMarker(LatLng coordinates) {
+    _mapMarkers.clear();
+    _coordinates = Coordinates(coordinates.latitude, coordinates.longitude);
+    setState(() {
+      _mapMarkers.add(
+        Marker(
+          markerId: MarkerId(const Uuid().v1()),
+          position: coordinates,
         ),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 32),
-          width: double.infinity,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 30),
-              Text(
-                "Lorem Ipsum Dolor Sit Amet $index",
-                textAlign: TextAlign.left,
-                style:
-                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: const [
-                  Text("2h"),
-                  SizedBox(
-                    width: 10,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              const Text(
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque nec congue velit. Vestibulum sit amet euismod nisi. Proin dapibus sagittis molestie. Aenean placerat ante massa, ut iaculis neque mollis vel. Curabitur finibus sagittis porttitor. Nam rhoncus posuere enim in suscipit. Nam non euismod felis. Cras ultrices risus dolor, vitae aliquet massa dictum at. In et lacus rutrum diam placerat auctor. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Duis tincidunt, leo a imperdiet lacinia, dolor est malesuada quam, vel lacinia lectus dui quis nulla. Vivamus a sollicitudin mauris. ",
-              ),
-              const SizedBox(height: 20),
-              const Text("map goes here"),
-            ],
-          ),
+      );
+    });
+  }
+
+  Future<void> _getDetails() async {
+    String id = widget.id;
+
+    final job = await FirestoreMethods().getJob(id);
+    if (job == null) {
+      showSnackBar("Job returned null.", context);
+      return;
+    }
+
+    double lat = ((job.geoHash as Map<String, dynamic>)["geopoint"] as GeoPoint)
+        .latitude;
+    double lon = ((job.geoHash as Map<String, dynamic>)["geopoint"] as GeoPoint)
+        .longitude;
+    _setMarker(LatLng(lat, lon));
+
+    bool alreadyApplied = false;
+
+    if (job.applicants != null &&
+        job.applicants!.contains(FirebaseAuth.instance.currentUser!.uid)) {
+      alreadyApplied = true;
+    }
+
+    setState(() {
+      _isLoading = false;
+      _job = job;
+      _alreadyApplied = alreadyApplied;
+    });
+  }
+
+  Future<void> _acceptJob() async {
+    String res = await FirestoreMethods().acceptJob(widget.id);
+    if (res != "success") {
+      showSnackBar(res, context);
+      return;
+    }
+
+    Navigator.pop(context);
+  }
+
+  Future<void> _withdrawJob() async {
+    String res = await FirestoreMethods().withdrawJob(widget.id);
+    if (res != "success") {
+      showSnackBar(res, context);
+      return;
+    }
+
+    Navigator.pop(context);
+  }
+
+  Widget _details() {
+    if (_job == null) {
+      return Center(
+        child: Column(
+          children: const [
+            Icon(Icons.clear),
+            Text("Something went wrong."),
+          ],
         ),
-      ],
+      );
+    }
+
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            height: 250,
+            width: double.infinity,
+            clipBehavior: Clip.hardEdge,
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.all(
+                Radius.circular(10),
+              ),
+            ),
+            child: Image(
+              image: NetworkImage(_job!.photoUrl!),
+              fit: BoxFit.cover,
+            ),
+          ),
+          const SizedBox(height: 30),
+          Text(
+            _job!.title,
+            textAlign: TextAlign.left,
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          const SizedBox(height: 20),
+          Text(
+            _job!.description,
+          ),
+          const SizedBox(height: 20),
+          SizedBox(
+            height: 300,
+            child: GoogleMap(
+              initialCameraPosition: const CameraPosition(
+                target: LatLng(24.142, -110.321),
+                zoom: 15,
+              ),
+              gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{
+                Factory<OneSequenceGestureRecognizer>(
+                  () => EagerGestureRecognizer(),
+                ),
+              },
+              onMapCreated: _onMapCreated,
+              tiltGesturesEnabled: false,
+              myLocationEnabled: true,
+              mapType: MapType.hybrid,
+              markers: _mapMarkers,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    index = (ModalRoute.of(context)?.settings.arguments ?? 0) as int;
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          !_isLoading
+              ? TextButton(
+                  onPressed: () {
+                    if (!_alreadyApplied) {
+                      _acceptJob();
+                      return;
+                    }
+                    _withdrawJob();
+                  },
+                  child: Text(
+                    !_alreadyApplied ? "Accept" : "Withdraw",
+                  ),
+                )
+              : const Icon(Icons.clear),
+        ],
         title: Text("Job Details"),
         backgroundColor: primaryColor.withOpacity(0.1),
       ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            _details(),
-            Flexible(
-              child: Container(),
-              flex: 1,
-            ),
-            ElevatedButton(
-              onPressed: () {},
-              child: Text(
-                "Accept",
-              ),
-            ),
-            SizedBox(
-              height: 30,
-            ),
-          ],
-        ),
+      body: SingleChildScrollView(
+        child: _isLoading ? LoadingWidget() : _details(),
       ),
     );
   }

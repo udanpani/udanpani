@@ -1,5 +1,17 @@
+/*
+  Displays all the jobs listed by the user and allows them to add to the list
+ */
+
+import 'dart:async';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:geoflutterfire/geoflutterfire.dart';
+import 'package:location/location.dart';
 import 'package:udanpani/core/colors.dart';
+import 'package:udanpani/services/firestore_service.dart';
+
+import '../../../domain/models/job_model/job.dart';
 
 class JobsListed extends StatefulWidget {
   const JobsListed({Key? key}) : super(key: key);
@@ -9,8 +21,29 @@ class JobsListed extends StatefulWidget {
 }
 
 class _JobsListedState extends State<JobsListed> {
+  List<Job>? _myJobs;
+
+  @override
+  void initState() {
+    super.initState();
+    _getMyJobs();
+  }
+
+  void _getMyJobs() async {
+    List<Job> jobs = await FirestoreMethods().getMyJobs();
+    print("GOT JOBS");
+
+    if (!mounted) return;
+
+    setState(() {
+      _myJobs = jobs;
+    });
+  }
+
   void navigateToAddNewScreen() {
-    Navigator.pushNamed(context, '/upload');
+    Navigator.pushNamed(context, '/upload').then((_) {
+      _getMyJobs();
+    });
   }
 
   @override
@@ -25,14 +58,23 @@ class _JobsListedState extends State<JobsListed> {
   }
 
   Widget _listedJobs() {
-    return ListView.builder(
-      itemCount: 6,
-      itemBuilder: (context, index) => ListTile(
-        leading: CircleAvatar(backgroundColor: primaryColor),
-        title: Text("Job $index"),
-        subtitle: Text("location"),
-        trailing: Text("000"),
-      ),
+    if (_myJobs != null) {
+      if (_myJobs!.isEmpty) {
+        return const Center(
+          child: Text("Add a new job to see it listed here"),
+        );
+      }
+      return ListView.builder(
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text(_myJobs![index].title),
+          );
+        },
+        itemCount: _myJobs!.length,
+      );
+    }
+    return const Center(
+      child: CircularProgressIndicator(),
     );
   }
 }
