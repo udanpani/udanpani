@@ -6,7 +6,9 @@ part 'user.g.dart';
 @freezed
 class User with _$User {
   factory User({
+    String? uid,
     required String username,
+    required String name,
     required String email,
     String? profilePicture,
   }) = _User;

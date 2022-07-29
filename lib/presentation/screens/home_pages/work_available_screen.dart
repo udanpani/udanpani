@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:location/location.dart';
 import 'package:udanpani/core/colors.dart';
+import 'package:udanpani/domain/models/job_model/job.dart';
 import 'package:udanpani/infrastructure/utils.dart';
 import 'package:udanpani/presentation/screens/applied_jobs_screen.dart';
 import 'package:udanpani/presentation/screens/job_details_screen.dart';
@@ -97,9 +98,14 @@ class _WorkAvailableState extends State<WorkAvailable> {
     );
   }
 
-  void _navigateToJobActions() {
+  void _navigateToJobActions(data) {
+    Job job = Job.fromJson(data);
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => JobActions()));
+      context,
+      MaterialPageRoute(
+        builder: (context) => JobActions(job: job),
+      ),
+    );
   }
 
   Widget _availableWork() {
@@ -119,7 +125,7 @@ class _WorkAvailableState extends State<WorkAvailable> {
                       onTap: () {
                         final jobID = doc.id;
                         if (data["posterUid"] == _auth.currentUser!.uid) {
-                          _navigateToJobActions();
+                          _navigateToJobActions(data);
                           return;
                         }
                         _navigateToDetails(jobID);

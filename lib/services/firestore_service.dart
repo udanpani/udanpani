@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:udanpani/domain/models/job_model/job.dart';
+import 'package:udanpani/domain/models/user_model/user.dart' as udanpani;
 import 'package:udanpani/services/storage_methods.dart';
 import 'package:uuid/uuid.dart';
 
@@ -17,6 +18,7 @@ class FirestoreMethods {
     required String description,
     required Coordinates coordinates,
     required Uint8List photo,
+    String? uid,
   }) async {
     String res = "Something went wrong";
 
@@ -28,7 +30,7 @@ class FirestoreMethods {
         longitude: coordinates.longitude,
       );
 
-      String jobID = Uuid().v1();
+      String jobID = uid ?? Uuid().v1();
 
       String photoURL =
           await StorageMethods().uploadJobImageToStorage('jobs', photo, jobID);
@@ -239,6 +241,37 @@ class FirestoreMethods {
       );
       await appDoc.update({"jobs_applied": currentApplicationList});
 
+      res = "success";
+    } catch (e) {
+      res = e.toString();
+    }
+
+    return res;
+  }
+
+  Future<udanpani.User> getUser(String uid) async {
+    udanpani.User user;
+
+    try {
+      final doc = await _firestore.collection('users').doc(uid).get();
+
+      user = udanpani.User.fromJson(doc.data()!);
+    } catch (e) {
+      user =
+          udanpani.User(username: e.toString(), name: "ERROR", email: "ERROR");
+    }
+
+    return user;
+  }
+
+  Future<String> acceptApplicant(
+      {required String jobID, required String applicantID}) async {
+    String res = "Some error occured";
+
+    try {
+      final doc = await _firestore.collection('posts').doc(jobID);
+
+      await doc.update({"acceptedApplicant": applicantID});
       res = "success";
     } catch (e) {
       res = e.toString();

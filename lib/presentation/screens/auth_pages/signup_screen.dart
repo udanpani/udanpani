@@ -19,6 +19,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _usernameEditingController = TextEditingController();
   final _emailEditingController = TextEditingController();
   final _passwordEditingController = TextEditingController();
+  final _nameEditingController = TextEditingController();
+
   Uint8List? _image;
   bool _isLoading = false;
 
@@ -27,6 +29,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     _usernameEditingController.dispose();
     _emailEditingController.dispose();
     _passwordEditingController.dispose();
+    _nameEditingController.dispose();
     super.dispose();
   }
 
@@ -47,6 +50,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
     String res = await AuthMethods().signUpUser(
       user: User(
+        name: _nameEditingController.text,
         username: _usernameEditingController.text,
         email: _emailEditingController.text,
       ),
@@ -108,6 +112,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
               TextFieldInput(
                 textEditingController: _usernameEditingController,
                 hintText: "Username",
+                textInputType: TextInputType.text,
+              ),
+              TextFieldInput(
+                textEditingController: _nameEditingController,
+                hintText: "Name",
                 textInputType: TextInputType.text,
               ),
               TextFieldInput(
