@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:udanpani/presentation/screens/home_pages/listed_jobs_screen.dart';
 import 'package:udanpani/presentation/screens/home_pages/profile_screen.dart';
@@ -29,3 +30,57 @@ List<Widget> pages = [
   const JobsListed(),
   ProfileScreen(),
 ];
+
+List<DropdownMenuItem<String>> jobListDropdownMenuItems = <String>[
+  'Cleaning',
+  'Vehicle Wash',
+  'Driving',
+  'Basic Electronic and Electrical Services',
+  'Manpower',
+  'Grass Trimming/Mowing',
+  'Caretaking',
+  'Others'
+].map<DropdownMenuItem<String>>((String value) {
+  return DropdownMenuItem<String>(
+    value: value,
+    child: Text(value),
+  );
+}).toList();
+
+List<DropdownMenuItem<String>> cleanListDropdownMenuItems = <String>[
+  'House',
+  'Compound',
+  'Equipments',
+  'Others',
+].map<DropdownMenuItem<String>>((String value) {
+  return DropdownMenuItem<String>(
+    value: value,
+    child: Text(value),
+  );
+}).toList();
+
+List<DropdownMenuItem<String>> vehicleListDropdownMenuItems = <String>[
+  'Bike',
+  'SUV',
+  'Sedan',
+  'Scooty',
+  'Hatchback',
+  'Others',
+].map<DropdownMenuItem<String>>((String value) {
+  return DropdownMenuItem<String>(
+    value: value,
+    child: Text(value),
+  );
+}).toList();
+
+List<DropdownMenuItem<String>> electronicListDropdownMenuItems = <String>[
+  'Appliance Repair',
+  'Technical Assistance',
+  'Appliance Replacement',
+  'Others',
+].map<DropdownMenuItem<String>>((String value) {
+  return DropdownMenuItem<String>(
+    value: value,
+    child: Text(value),
+  );
+}).toList();

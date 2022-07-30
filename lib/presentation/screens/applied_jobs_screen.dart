@@ -54,7 +54,10 @@ class _AppliedJobsScreenState extends State<AppliedJobsScreen> {
         MaterialPageRoute(
           builder: (context) => JobDetailsScreen(id: id),
         ),
-      );
+      ).then((value) {
+        _getAppliedJobs();
+        setState(() {});
+      });
     }
 
     _buildApplicationStatus(Job job) {
@@ -70,12 +73,17 @@ class _AppliedJobsScreenState extends State<AppliedJobsScreen> {
 
       switch (job.status) {
         case "accepted":
-          return const Icon(Icons.done);
-        case "in progress":
-          return const Icon(Icons.access_time);
-        case "completed":
           return const Icon(
             Icons.task_alt,
+            color: Colors.green,
+          );
+        case "in progress":
+          return const Icon(Icons.access_time);
+        case "paid":
+          return const Icon(Icons.done);
+        case "completed":
+          return const Icon(
+            Icons.done_all,
             color: Colors.green,
           );
       }
@@ -97,7 +105,7 @@ class _AppliedJobsScreenState extends State<AppliedJobsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Listed Jobs"),
+        title: const Text("My Applications"),
       ),
       body: SafeArea(
         child: _buildJobs(),

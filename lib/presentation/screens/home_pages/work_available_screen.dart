@@ -35,6 +35,7 @@ class _WorkAvailableState extends State<WorkAvailable> {
     if (!mounted) return;
     await _getUserLocation();
     if (_coordinates != null) {
+      if (!mounted) return;
       setState(() {
         stream = FirestoreMethods().getJobsNearMe(_coordinates!);
       });
@@ -121,6 +122,8 @@ class _WorkAvailableState extends State<WorkAvailable> {
                   itemBuilder: (context, index) {
                     final doc = snapshot.data![index];
                     final data = doc.data() as Map<String, dynamic>;
+                    final job = Job.fromJson(data);
+
                     return ListTile(
                       onTap: () {
                         final jobID = doc.id;
@@ -132,11 +135,11 @@ class _WorkAvailableState extends State<WorkAvailable> {
                       },
                       leading: CircleAvatar(
                         backgroundColor: primaryColor,
-                        backgroundImage: NetworkImage(data['photoUrl']),
+                        backgroundImage: NetworkImage(job.photoUrl!),
                       ),
-                      title: Text("${data['title']}"),
-                      subtitle: Text("location"),
-                      trailing: Text("000"),
+                      title: Text(job.title),
+                      subtitle: Text(job.locationAsName),
+                      trailing: Text("₹ ${job.price}"),
                     );
                   });
             } else if (snapshot.hasError) {

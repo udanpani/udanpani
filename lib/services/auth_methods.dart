@@ -33,7 +33,9 @@ class AuthMethods {
       );
 
       await _firestore.collection('users').doc(cred.user!.uid).set(
-            user.copyWith(profilePicture: photoUrl).toJson(),
+            user
+                .copyWith(uid: cred.user!.uid, profilePicture: photoUrl)
+                .toJson(),
           );
 
       await _firestore

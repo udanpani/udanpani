@@ -51,22 +51,30 @@ class _JobsListedState extends State<JobsListed> {
   _buildApplicationStatus(Job job) {
     switch (job.status) {
       case "pending":
-        return const Icon(Icons.more_horiz);
+        return const Icon(Icons.more_horiz_outlined);
       case "accepted":
-        return const Icon(Icons.done);
-      case "in progress":
-        return const Icon(Icons.access_time);
-      case "completed":
         return const Icon(
           Icons.task_alt,
+          color: Colors.green,
+        );
+      case "in progress":
+        return const Icon(Icons.access_time);
+      case "paid":
+        return const Icon(Icons.done);
+      case "completed":
+        return const Icon(
+          Icons.done_all,
           color: Colors.green,
         );
     }
   }
 
   _navigateToJobActions(Job job) {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => JobActions(job: job)));
+    Navigator.push(context,
+            MaterialPageRoute(builder: (context) => JobActions(job: job)))
+        .then((_) {
+      _getMyJobs();
+    });
   }
 
   @override
@@ -83,7 +91,7 @@ class _JobsListedState extends State<JobsListed> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Text(
-                    "Listed Jobs",
+                    "My Listings",
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                   ),
                   IconButton(

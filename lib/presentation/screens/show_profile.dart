@@ -10,16 +10,16 @@ import 'package:udanpani/services/firestore_service.dart';
 import 'package:udanpani/widgets/loadingwidget.dart';
 import 'package:udanpani/widgets/showSnackbar.dart';
 
-class ProfileScreen extends StatefulWidget {
-  ProfileScreen({Key? key, this.uid}) : super(key: key);
+class ShowProfileScreen extends StatefulWidget {
+  ShowProfileScreen({Key? key, this.uid}) : super(key: key);
 
   String? uid;
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
+  State<ShowProfileScreen> createState() => _ShowProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _ShowProfileScreenState extends State<ShowProfileScreen> {
   udanpani.User? _user;
   bool _isLoading = true;
   bool _isReviewsLoading = true;
@@ -36,11 +36,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       _isLoading = true;
     });
 
-    widget.uid = FirebaseAuth.instance.currentUser!.uid;
-
     udanpani.User user = await FirestoreMethods().getUser(widget.uid!);
 
-    if (!mounted) return;
     setState(() {
       _user = user;
       _isLoading = false;
@@ -50,14 +47,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   _getReviews() async {
-    if (!mounted)
-      return setState(() {
-        _isReviewsLoading = true;
-      });
+    setState(() {
+      _isReviewsLoading = true;
+    });
 
     var reviews = await FirestoreMethods().getReviews(_user!.reviews!);
 
-    if (!mounted) return;
     setState(() {
       _isReviewsLoading = false;
       _reviews = reviews;
@@ -117,16 +112,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: mobileBackgroundColor,
-        actions: [
-          IconButton(
-            onPressed: () {
-              _signout(context);
-            },
-            icon: const Icon(
-              Icons.logout,
-            ),
-          ),
-        ],
       ),
       body: _isLoading && _user == null
           ? LoadingWidget()
@@ -156,13 +141,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   const SizedBox(
                     height: 30,
                   ),
-                  Text("REVIEWS: "),
-                  SizedBox(
-                    height: 10,
-                  ),
                   Expanded(
-                    child:
-                        _isReviewsLoading ? LoadingWidget() : _buildReviews(),
+                    child: _buildReviews(),
                   ),
                 ],
               ),

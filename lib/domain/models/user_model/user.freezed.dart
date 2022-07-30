@@ -24,6 +24,12 @@ mixin _$User {
   String get username => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   String get email => throw _privateConstructorUsedError;
+  String get phoneNumber => throw _privateConstructorUsedError;
+  String? get addressProof => throw _privateConstructorUsedError;
+  String? get verifications => throw _privateConstructorUsedError;
+  double? get rating => throw _privateConstructorUsedError;
+  int? get noOfReviews => throw _privateConstructorUsedError;
+  List<String>? get reviews => throw _privateConstructorUsedError;
   String? get profilePicture => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -40,6 +46,12 @@ abstract class $UserCopyWith<$Res> {
       String username,
       String name,
       String email,
+      String phoneNumber,
+      String? addressProof,
+      String? verifications,
+      double? rating,
+      int? noOfReviews,
+      List<String>? reviews,
       String? profilePicture});
 }
 
@@ -57,6 +69,12 @@ class _$UserCopyWithImpl<$Res> implements $UserCopyWith<$Res> {
     Object? username = freezed,
     Object? name = freezed,
     Object? email = freezed,
+    Object? phoneNumber = freezed,
+    Object? addressProof = freezed,
+    Object? verifications = freezed,
+    Object? rating = freezed,
+    Object? noOfReviews = freezed,
+    Object? reviews = freezed,
     Object? profilePicture = freezed,
   }) {
     return _then(_value.copyWith(
@@ -76,6 +94,30 @@ class _$UserCopyWithImpl<$Res> implements $UserCopyWith<$Res> {
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
               as String,
+      phoneNumber: phoneNumber == freezed
+          ? _value.phoneNumber
+          : phoneNumber // ignore: cast_nullable_to_non_nullable
+              as String,
+      addressProof: addressProof == freezed
+          ? _value.addressProof
+          : addressProof // ignore: cast_nullable_to_non_nullable
+              as String?,
+      verifications: verifications == freezed
+          ? _value.verifications
+          : verifications // ignore: cast_nullable_to_non_nullable
+              as String?,
+      rating: rating == freezed
+          ? _value.rating
+          : rating // ignore: cast_nullable_to_non_nullable
+              as double?,
+      noOfReviews: noOfReviews == freezed
+          ? _value.noOfReviews
+          : noOfReviews // ignore: cast_nullable_to_non_nullable
+              as int?,
+      reviews: reviews == freezed
+          ? _value.reviews
+          : reviews // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
       profilePicture: profilePicture == freezed
           ? _value.profilePicture
           : profilePicture // ignore: cast_nullable_to_non_nullable
@@ -94,6 +136,12 @@ abstract class _$$_UserCopyWith<$Res> implements $UserCopyWith<$Res> {
       String username,
       String name,
       String email,
+      String phoneNumber,
+      String? addressProof,
+      String? verifications,
+      double? rating,
+      int? noOfReviews,
+      List<String>? reviews,
       String? profilePicture});
 }
 
@@ -112,6 +160,12 @@ class __$$_UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res>
     Object? username = freezed,
     Object? name = freezed,
     Object? email = freezed,
+    Object? phoneNumber = freezed,
+    Object? addressProof = freezed,
+    Object? verifications = freezed,
+    Object? rating = freezed,
+    Object? noOfReviews = freezed,
+    Object? reviews = freezed,
     Object? profilePicture = freezed,
   }) {
     return _then(_$_User(
@@ -131,6 +185,30 @@ class __$$_UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res>
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
               as String,
+      phoneNumber: phoneNumber == freezed
+          ? _value.phoneNumber
+          : phoneNumber // ignore: cast_nullable_to_non_nullable
+              as String,
+      addressProof: addressProof == freezed
+          ? _value.addressProof
+          : addressProof // ignore: cast_nullable_to_non_nullable
+              as String?,
+      verifications: verifications == freezed
+          ? _value.verifications
+          : verifications // ignore: cast_nullable_to_non_nullable
+              as String?,
+      rating: rating == freezed
+          ? _value.rating
+          : rating // ignore: cast_nullable_to_non_nullable
+              as double?,
+      noOfReviews: noOfReviews == freezed
+          ? _value.noOfReviews
+          : noOfReviews // ignore: cast_nullable_to_non_nullable
+              as int?,
+      reviews: reviews == freezed
+          ? _value._reviews
+          : reviews // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
       profilePicture: profilePicture == freezed
           ? _value.profilePicture
           : profilePicture // ignore: cast_nullable_to_non_nullable
@@ -147,7 +225,14 @@ class _$_User implements _User {
       required this.username,
       required this.name,
       required this.email,
-      this.profilePicture});
+      required this.phoneNumber,
+      this.addressProof,
+      this.verifications,
+      this.rating,
+      this.noOfReviews,
+      final List<String>? reviews,
+      this.profilePicture})
+      : _reviews = reviews;
 
   factory _$_User.fromJson(Map<String, dynamic> json) => _$$_UserFromJson(json);
 
@@ -160,11 +245,30 @@ class _$_User implements _User {
   @override
   final String email;
   @override
+  final String phoneNumber;
+  @override
+  final String? addressProof;
+  @override
+  final String? verifications;
+  @override
+  final double? rating;
+  @override
+  final int? noOfReviews;
+  final List<String>? _reviews;
+  @override
+  List<String>? get reviews {
+    final value = _reviews;
+    if (value == null) return null;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  @override
   final String? profilePicture;
 
   @override
   String toString() {
-    return 'User(uid: $uid, username: $username, name: $name, email: $email, profilePicture: $profilePicture)';
+    return 'User(uid: $uid, username: $username, name: $name, email: $email, phoneNumber: $phoneNumber, addressProof: $addressProof, verifications: $verifications, rating: $rating, noOfReviews: $noOfReviews, reviews: $reviews, profilePicture: $profilePicture)';
   }
 
   @override
@@ -177,6 +281,16 @@ class _$_User implements _User {
             const DeepCollectionEquality().equals(other.name, name) &&
             const DeepCollectionEquality().equals(other.email, email) &&
             const DeepCollectionEquality()
+                .equals(other.phoneNumber, phoneNumber) &&
+            const DeepCollectionEquality()
+                .equals(other.addressProof, addressProof) &&
+            const DeepCollectionEquality()
+                .equals(other.verifications, verifications) &&
+            const DeepCollectionEquality().equals(other.rating, rating) &&
+            const DeepCollectionEquality()
+                .equals(other.noOfReviews, noOfReviews) &&
+            const DeepCollectionEquality().equals(other._reviews, _reviews) &&
+            const DeepCollectionEquality()
                 .equals(other.profilePicture, profilePicture));
   }
 
@@ -188,6 +302,12 @@ class _$_User implements _User {
       const DeepCollectionEquality().hash(username),
       const DeepCollectionEquality().hash(name),
       const DeepCollectionEquality().hash(email),
+      const DeepCollectionEquality().hash(phoneNumber),
+      const DeepCollectionEquality().hash(addressProof),
+      const DeepCollectionEquality().hash(verifications),
+      const DeepCollectionEquality().hash(rating),
+      const DeepCollectionEquality().hash(noOfReviews),
+      const DeepCollectionEquality().hash(_reviews),
       const DeepCollectionEquality().hash(profilePicture));
 
   @JsonKey(ignore: true)
@@ -207,6 +327,12 @@ abstract class _User implements User {
       required final String username,
       required final String name,
       required final String email,
+      required final String phoneNumber,
+      final String? addressProof,
+      final String? verifications,
+      final double? rating,
+      final int? noOfReviews,
+      final List<String>? reviews,
       final String? profilePicture}) = _$_User;
 
   factory _User.fromJson(Map<String, dynamic> json) = _$_User.fromJson;
@@ -219,6 +345,18 @@ abstract class _User implements User {
   String get name => throw _privateConstructorUsedError;
   @override
   String get email => throw _privateConstructorUsedError;
+  @override
+  String get phoneNumber => throw _privateConstructorUsedError;
+  @override
+  String? get addressProof => throw _privateConstructorUsedError;
+  @override
+  String? get verifications => throw _privateConstructorUsedError;
+  @override
+  double? get rating => throw _privateConstructorUsedError;
+  @override
+  int? get noOfReviews => throw _privateConstructorUsedError;
+  @override
+  List<String>? get reviews => throw _privateConstructorUsedError;
   @override
   String? get profilePicture => throw _privateConstructorUsedError;
   @override

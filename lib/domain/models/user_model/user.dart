@@ -10,6 +10,12 @@ class User with _$User {
     required String username,
     required String name,
     required String email,
+    required String phoneNumber,
+    String? addressProof,
+    String? verifications,
+    double? rating,
+    int? noOfReviews,
+    List<String>? reviews,
     String? profilePicture,
   }) = _User;
 

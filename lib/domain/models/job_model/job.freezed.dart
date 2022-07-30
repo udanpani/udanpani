@@ -24,13 +24,17 @@ mixin _$Job {
   String get title => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
   String get posterUid => throw _privateConstructorUsedError;
+  String get price => throw _privateConstructorUsedError;
   String? get photoUrl => throw _privateConstructorUsedError;
   dynamic get geoHash => throw _privateConstructorUsedError;
+  String get locationAsName => throw _privateConstructorUsedError;
   List<String>? get applicants => throw _privateConstructorUsedError;
   String get status =>
       throw _privateConstructorUsedError; // pending for inviting application
-// pending -> accepted ->  in progress -> completed
+// pending -> accepted ->  in progress -> paid -> completed
   String? get acceptedApplicant => throw _privateConstructorUsedError;
+  bool get workerReviewed => throw _privateConstructorUsedError;
+  bool get employerReviewed => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -46,11 +50,15 @@ abstract class $JobCopyWith<$Res> {
       String title,
       String description,
       String posterUid,
+      String price,
       String? photoUrl,
       dynamic geoHash,
+      String locationAsName,
       List<String>? applicants,
       String status,
-      String? acceptedApplicant});
+      String? acceptedApplicant,
+      bool workerReviewed,
+      bool employerReviewed});
 }
 
 /// @nodoc
@@ -67,11 +75,15 @@ class _$JobCopyWithImpl<$Res> implements $JobCopyWith<$Res> {
     Object? title = freezed,
     Object? description = freezed,
     Object? posterUid = freezed,
+    Object? price = freezed,
     Object? photoUrl = freezed,
     Object? geoHash = freezed,
+    Object? locationAsName = freezed,
     Object? applicants = freezed,
     Object? status = freezed,
     Object? acceptedApplicant = freezed,
+    Object? workerReviewed = freezed,
+    Object? employerReviewed = freezed,
   }) {
     return _then(_value.copyWith(
       jobId: jobId == freezed
@@ -90,6 +102,10 @@ class _$JobCopyWithImpl<$Res> implements $JobCopyWith<$Res> {
           ? _value.posterUid
           : posterUid // ignore: cast_nullable_to_non_nullable
               as String,
+      price: price == freezed
+          ? _value.price
+          : price // ignore: cast_nullable_to_non_nullable
+              as String,
       photoUrl: photoUrl == freezed
           ? _value.photoUrl
           : photoUrl // ignore: cast_nullable_to_non_nullable
@@ -98,6 +114,10 @@ class _$JobCopyWithImpl<$Res> implements $JobCopyWith<$Res> {
           ? _value.geoHash
           : geoHash // ignore: cast_nullable_to_non_nullable
               as dynamic,
+      locationAsName: locationAsName == freezed
+          ? _value.locationAsName
+          : locationAsName // ignore: cast_nullable_to_non_nullable
+              as String,
       applicants: applicants == freezed
           ? _value.applicants
           : applicants // ignore: cast_nullable_to_non_nullable
@@ -110,6 +130,14 @@ class _$JobCopyWithImpl<$Res> implements $JobCopyWith<$Res> {
           ? _value.acceptedApplicant
           : acceptedApplicant // ignore: cast_nullable_to_non_nullable
               as String?,
+      workerReviewed: workerReviewed == freezed
+          ? _value.workerReviewed
+          : workerReviewed // ignore: cast_nullable_to_non_nullable
+              as bool,
+      employerReviewed: employerReviewed == freezed
+          ? _value.employerReviewed
+          : employerReviewed // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -124,11 +152,15 @@ abstract class _$$_JobCopyWith<$Res> implements $JobCopyWith<$Res> {
       String title,
       String description,
       String posterUid,
+      String price,
       String? photoUrl,
       dynamic geoHash,
+      String locationAsName,
       List<String>? applicants,
       String status,
-      String? acceptedApplicant});
+      String? acceptedApplicant,
+      bool workerReviewed,
+      bool employerReviewed});
 }
 
 /// @nodoc
@@ -146,11 +178,15 @@ class __$$_JobCopyWithImpl<$Res> extends _$JobCopyWithImpl<$Res>
     Object? title = freezed,
     Object? description = freezed,
     Object? posterUid = freezed,
+    Object? price = freezed,
     Object? photoUrl = freezed,
     Object? geoHash = freezed,
+    Object? locationAsName = freezed,
     Object? applicants = freezed,
     Object? status = freezed,
     Object? acceptedApplicant = freezed,
+    Object? workerReviewed = freezed,
+    Object? employerReviewed = freezed,
   }) {
     return _then(_$_Job(
       jobId: jobId == freezed
@@ -169,6 +205,10 @@ class __$$_JobCopyWithImpl<$Res> extends _$JobCopyWithImpl<$Res>
           ? _value.posterUid
           : posterUid // ignore: cast_nullable_to_non_nullable
               as String,
+      price: price == freezed
+          ? _value.price
+          : price // ignore: cast_nullable_to_non_nullable
+              as String,
       photoUrl: photoUrl == freezed
           ? _value.photoUrl
           : photoUrl // ignore: cast_nullable_to_non_nullable
@@ -177,6 +217,10 @@ class __$$_JobCopyWithImpl<$Res> extends _$JobCopyWithImpl<$Res>
           ? _value.geoHash
           : geoHash // ignore: cast_nullable_to_non_nullable
               as dynamic,
+      locationAsName: locationAsName == freezed
+          ? _value.locationAsName
+          : locationAsName // ignore: cast_nullable_to_non_nullable
+              as String,
       applicants: applicants == freezed
           ? _value._applicants
           : applicants // ignore: cast_nullable_to_non_nullable
@@ -189,6 +233,14 @@ class __$$_JobCopyWithImpl<$Res> extends _$JobCopyWithImpl<$Res>
           ? _value.acceptedApplicant
           : acceptedApplicant // ignore: cast_nullable_to_non_nullable
               as String?,
+      workerReviewed: workerReviewed == freezed
+          ? _value.workerReviewed
+          : workerReviewed // ignore: cast_nullable_to_non_nullable
+              as bool,
+      employerReviewed: employerReviewed == freezed
+          ? _value.employerReviewed
+          : employerReviewed // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -201,11 +253,15 @@ class _$_Job implements _Job {
       required this.title,
       required this.description,
       required this.posterUid,
+      required this.price,
       this.photoUrl,
       required this.geoHash,
+      required this.locationAsName,
       final List<String>? applicants,
       required this.status,
-      this.acceptedApplicant})
+      this.acceptedApplicant,
+      required this.workerReviewed,
+      required this.employerReviewed})
       : _applicants = applicants;
 
   factory _$_Job.fromJson(Map<String, dynamic> json) => _$$_JobFromJson(json);
@@ -219,9 +275,13 @@ class _$_Job implements _Job {
   @override
   final String posterUid;
   @override
+  final String price;
+  @override
   final String? photoUrl;
   @override
   final dynamic geoHash;
+  @override
+  final String locationAsName;
   final List<String>? _applicants;
   @override
   List<String>? get applicants {
@@ -234,13 +294,17 @@ class _$_Job implements _Job {
   @override
   final String status;
 // pending for inviting application
-// pending -> accepted ->  in progress -> completed
+// pending -> accepted ->  in progress -> paid -> completed
   @override
   final String? acceptedApplicant;
+  @override
+  final bool workerReviewed;
+  @override
+  final bool employerReviewed;
 
   @override
   String toString() {
-    return 'Job(jobId: $jobId, title: $title, description: $description, posterUid: $posterUid, photoUrl: $photoUrl, geoHash: $geoHash, applicants: $applicants, status: $status, acceptedApplicant: $acceptedApplicant)';
+    return 'Job(jobId: $jobId, title: $title, description: $description, posterUid: $posterUid, price: $price, photoUrl: $photoUrl, geoHash: $geoHash, locationAsName: $locationAsName, applicants: $applicants, status: $status, acceptedApplicant: $acceptedApplicant, workerReviewed: $workerReviewed, employerReviewed: $employerReviewed)';
   }
 
   @override
@@ -253,13 +317,20 @@ class _$_Job implements _Job {
             const DeepCollectionEquality()
                 .equals(other.description, description) &&
             const DeepCollectionEquality().equals(other.posterUid, posterUid) &&
+            const DeepCollectionEquality().equals(other.price, price) &&
             const DeepCollectionEquality().equals(other.photoUrl, photoUrl) &&
             const DeepCollectionEquality().equals(other.geoHash, geoHash) &&
+            const DeepCollectionEquality()
+                .equals(other.locationAsName, locationAsName) &&
             const DeepCollectionEquality()
                 .equals(other._applicants, _applicants) &&
             const DeepCollectionEquality().equals(other.status, status) &&
             const DeepCollectionEquality()
-                .equals(other.acceptedApplicant, acceptedApplicant));
+                .equals(other.acceptedApplicant, acceptedApplicant) &&
+            const DeepCollectionEquality()
+                .equals(other.workerReviewed, workerReviewed) &&
+            const DeepCollectionEquality()
+                .equals(other.employerReviewed, employerReviewed));
   }
 
   @JsonKey(ignore: true)
@@ -270,11 +341,15 @@ class _$_Job implements _Job {
       const DeepCollectionEquality().hash(title),
       const DeepCollectionEquality().hash(description),
       const DeepCollectionEquality().hash(posterUid),
+      const DeepCollectionEquality().hash(price),
       const DeepCollectionEquality().hash(photoUrl),
       const DeepCollectionEquality().hash(geoHash),
+      const DeepCollectionEquality().hash(locationAsName),
       const DeepCollectionEquality().hash(_applicants),
       const DeepCollectionEquality().hash(status),
-      const DeepCollectionEquality().hash(acceptedApplicant));
+      const DeepCollectionEquality().hash(acceptedApplicant),
+      const DeepCollectionEquality().hash(workerReviewed),
+      const DeepCollectionEquality().hash(employerReviewed));
 
   @JsonKey(ignore: true)
   @override
@@ -293,11 +368,15 @@ abstract class _Job implements Job {
       required final String title,
       required final String description,
       required final String posterUid,
+      required final String price,
       final String? photoUrl,
       required final dynamic geoHash,
+      required final String locationAsName,
       final List<String>? applicants,
       required final String status,
-      final String? acceptedApplicant}) = _$_Job;
+      final String? acceptedApplicant,
+      required final bool workerReviewed,
+      required final bool employerReviewed}) = _$_Job;
 
   factory _Job.fromJson(Map<String, dynamic> json) = _$_Job.fromJson;
 
@@ -310,16 +389,24 @@ abstract class _Job implements Job {
   @override
   String get posterUid => throw _privateConstructorUsedError;
   @override
+  String get price => throw _privateConstructorUsedError;
+  @override
   String? get photoUrl => throw _privateConstructorUsedError;
   @override
   dynamic get geoHash => throw _privateConstructorUsedError;
+  @override
+  String get locationAsName => throw _privateConstructorUsedError;
   @override
   List<String>? get applicants => throw _privateConstructorUsedError;
   @override
   String get status => throw _privateConstructorUsedError;
   @override // pending for inviting application
-// pending -> accepted ->  in progress -> completed
+// pending -> accepted ->  in progress -> paid -> completed
   String? get acceptedApplicant => throw _privateConstructorUsedError;
+  @override
+  bool get workerReviewed => throw _privateConstructorUsedError;
+  @override
+  bool get employerReviewed => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$$_JobCopyWith<_$_Job> get copyWith => throw _privateConstructorUsedError;
