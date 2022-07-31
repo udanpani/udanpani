@@ -127,7 +127,10 @@ class FirestoreMethods {
   Future<Job> getJob(String docID) async {
     print("Getting jobs");
 
-    var data = await _firestore.collection("posts").doc(docID).get();
+    var data = await _firestore
+        .collection("posts")
+        .doc(docID)
+        .get(const GetOptions(source: Source.server));
 
     Job job = Job.fromJson(data.data()!);
 
@@ -165,7 +168,7 @@ class FirestoreMethods {
     var collectionReference =
         _firestore.collection('posts').where("status", isEqualTo: "pending");
 
-    double radius = 50;
+    double radius = 15;
     String field = 'geoHash';
 
     Stream<List<DocumentSnapshot>> stream = _geo
@@ -292,6 +295,7 @@ class FirestoreMethods {
       if (afterAccept) {
         udanpani.User user = await getUser(_auth.currentUser!.uid);
         double newRating = user.rating! - 0.1;
+        newRating = (newRating < 0) ? 0 : newRating;
         await _firestore
             .collection('users')
             .doc(user.uid)
@@ -436,5 +440,21 @@ class FirestoreMethods {
     }
 
     return res;
+  }
+
+  Future<bool> checkForPhone(String phoneNumber) async {
+    try {
+      var doc = await _firestore
+          .collection('users')
+          .where("phoneNumber", isEqualTo: phoneNumber)
+          .get();
+      if (doc.docs.isNotEmpty) {
+        return true;
+      }
+
+      return false;
+    } catch (e) {
+      return true;
+    }
   }
 }

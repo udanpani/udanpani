@@ -7,16 +7,20 @@ class TextFormInput extends StatelessWidget {
   final TextInputType textInputType;
   final int maxLines;
   final bool isNumber;
+  Widget? prefix;
+  int? maxLength;
 
-  const TextFormInput({
-    Key? key,
-    required this.textEditingController,
-    this.isPass = false,
-    required this.hintText,
-    required this.textInputType,
-    this.maxLines = 1,
-    this.isNumber = false,
-  }) : super(key: key);
+  TextFormInput(
+      {Key? key,
+      required this.textEditingController,
+      this.isPass = false,
+      required this.hintText,
+      required this.textInputType,
+      this.maxLines = 1,
+      this.prefix,
+      this.isNumber = false,
+      this.maxLength})
+      : super(key: key);
 
   bool isNumeric(String s) {
     if (s == null) {
@@ -42,6 +46,7 @@ class TextFormInput extends StatelessWidget {
       },
       controller: textEditingController,
       decoration: InputDecoration(
+        prefix: prefix,
         hintText: hintText,
         border: inputBorder,
         enabledBorder: inputBorder,
@@ -51,6 +56,7 @@ class TextFormInput extends StatelessWidget {
       keyboardType: textInputType,
       obscureText: isPass,
       maxLines: maxLines,
+      maxLength: maxLength,
     );
   }
 }

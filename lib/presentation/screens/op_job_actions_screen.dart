@@ -10,6 +10,8 @@ import 'package:udanpani/infrastructure/utils.dart';
 import 'package:udanpani/presentation/screens/home_pages/profile_screen.dart';
 import 'package:udanpani/presentation/screens/show_profile.dart';
 import 'package:udanpani/services/firestore_service.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class JobActions extends StatefulWidget {
   JobActions({
@@ -140,14 +142,59 @@ class _JobActionsState extends State<JobActions> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           ListTile(
+            shape: RoundedRectangleBorder(
+              side: BorderSide(color: Colors.green, width: 1),
+              borderRadius: BorderRadius.circular(5),
+            ),
+            leading: CircleAvatar(
+                backgroundImage: NetworkImage(
+              _acceptedApplicant!.profilePicture!,
+            )),
             title: Text(_acceptedApplicant!.username),
             trailing: _showApplicationStatus(),
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          ShowProfileScreen(uid: _acceptedApplicant!.uid!)));
+            },
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Text(widget.job.status == "in progress"
+              ? "Work in progress"
+              : "Please call the worker for further progress:"),
+          SizedBox(
+            height: 10,
           ),
 
-          // to do change with phone
-          Text(_acceptedApplicant!.email),
+          Card(
+            shape: RoundedRectangleBorder(
+              side: BorderSide(
+                color: Colors.green.shade300,
+              ),
+              borderRadius: BorderRadius.circular(15.0),
+            ),
+            child: ListTile(
+              leading: const Icon(Icons.phone),
+              title: Text(
+                _acceptedApplicant!.phoneNumber,
+              ),
+              onTap: () {
+                launchUrlString("tel:${_acceptedApplicant!.phoneNumber}");
+              },
+            ),
+          ),
+
+          //Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+          //Icon(Icons.phone),
+          //Text(_acceptedApplicant!.phoneNumber),
+          //]),
+
           const SizedBox(
-            height: 10,
+            height: 20,
           ),
           const Text(
             " ⚠️ Make sure to ask the worker to mark \"payment received\" upon payment",

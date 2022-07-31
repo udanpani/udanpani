@@ -5,7 +5,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:udanpani/core/colors.dart';
 import 'package:udanpani/domain/models/user_model/user.dart';
 import 'package:udanpani/infrastructure/utils.dart';
+import 'package:udanpani/presentation/screens/auth_pages/otp.dart';
 import 'package:udanpani/services/auth_methods.dart';
+import 'package:udanpani/services/firestore_service.dart';
 import 'package:udanpani/widgets/text_input_field.dart';
 import 'package:udanpani/widgets/textforminput.dart';
 
@@ -55,6 +57,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
       return;
     }
 
+    if (_phoneEditingController.text.trim().length != 10) {
+      showSnackBar("Invalid phone number", context);
+      return;
+    }
+    String phoneNumber = "+91" + _phoneEditingController.text.trim();
+
     if (_image == null) {
       showSnackBar("No Image selected", context);
       return;
@@ -64,12 +72,40 @@ class _SignUpScreenState extends State<SignUpScreen> {
       _isLoading = true;
     });
 
+    bool isPhoneAlreadyRegistered =
+        await FirestoreMethods().checkForPhone(phoneNumber);
+    if (isPhoneAlreadyRegistered) {
+      showSnackBar("Phone number already in use", context);
+
+      setState(() {
+        _isLoading = false;
+      });
+      return;
+    }
+
+    bool? phoneValidated = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => OTPScreen(phoneNumber),
+      ),
+    );
+
+    if (phoneValidated == null || !phoneValidated) {
+      showSnackBar("OTP Verification failed", context);
+
+      setState(() {
+        _isLoading = false;
+      });
+
+      return;
+    }
+
     String res = await AuthMethods().signUpUser(
       user: User(
         name: _nameEditingController.text,
         username: _usernameEditingController.text,
         email: _emailEditingController.text.trim(),
-        phoneNumber: _phoneEditingController.text.trim(),
+        phoneNumber: phoneNumber,
         rating: 0,
         noOfReviews: 0,
         reviews: [],
@@ -137,27 +173,40 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     hintText: "Username",
                     textInputType: TextInputType.text,
                   ),
+                  const SizedBox(height: 10),
                   TextFormInput(
                     textEditingController: _nameEditingController,
                     hintText: "Name",
                     textInputType: TextInputType.text,
                   ),
+                  const SizedBox(height: 10),
                   TextFormInput(
+                    prefix: const Padding(
+                      padding: EdgeInsets.all(4),
+                      child: Text(
+                        "+91",
+                      ),
+                    ),
                     textEditingController: _phoneEditingController,
-                    hintText: "Phone Number with Country Code +91",
-                    textInputType: TextInputType.text,
+                    hintText: "Phone Number",
+                    isNumber: true,
+                    maxLength: 10,
+                    textInputType: TextInputType.number,
                   ),
+                  const SizedBox(height: 10),
                   TextFormInput(
                     textEditingController: _emailEditingController,
                     hintText: "Email",
                     textInputType: TextInputType.emailAddress,
                   ),
+                  const SizedBox(height: 10),
                   TextFormInput(
                     textEditingController: _passwordEditingController,
                     hintText: "Password",
                     textInputType: TextInputType.text,
                     isPass: true,
                   ),
+                  const SizedBox(height: 10),
                   ElevatedButton(
                     onPressed: _signUpUser,
                     child: _isLoading

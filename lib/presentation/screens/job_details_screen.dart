@@ -503,8 +503,9 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
           showSnackBar(res, context);
         }
 
-        _getDetails();
-        _getReviews();
+        await _getDetails();
+        await _getReviews();
+        setState(() {});
         return;
       },
     );
