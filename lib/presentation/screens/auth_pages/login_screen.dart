@@ -100,6 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 //todo logo
+                const Image(image: AssetImage('assets/logo.png')),
 
                 const SizedBox(
                   height: 60,

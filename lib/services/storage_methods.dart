@@ -18,12 +18,13 @@ class StorageMethods {
 
   Future<String> uploadImageToStorage(
     String childName,
-    Uint8List image,
-  ) async {
+    Uint8List image, {
+    String suffix = "",
+  }) async {
     //compress image;
     final file = await compressImage(image);
     Reference ref =
-        _storage.ref().child(childName).child(_auth.currentUser!.uid);
+        _storage.ref().child(childName).child(_auth.currentUser!.uid + suffix);
     UploadTask uploadTask = ref.putData(file);
 
     TaskSnapshot snap = await uploadTask;

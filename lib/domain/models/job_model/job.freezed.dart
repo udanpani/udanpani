@@ -33,6 +33,7 @@ mixin _$Job {
       throw _privateConstructorUsedError; // pending for inviting application
 // pending -> accepted ->  in progress -> paid -> completed
   String? get acceptedApplicant => throw _privateConstructorUsedError;
+  DateTime get date => throw _privateConstructorUsedError;
   bool get workerReviewed => throw _privateConstructorUsedError;
   bool get employerReviewed => throw _privateConstructorUsedError;
 
@@ -57,6 +58,7 @@ abstract class $JobCopyWith<$Res> {
       List<String>? applicants,
       String status,
       String? acceptedApplicant,
+      DateTime date,
       bool workerReviewed,
       bool employerReviewed});
 }
@@ -82,6 +84,7 @@ class _$JobCopyWithImpl<$Res> implements $JobCopyWith<$Res> {
     Object? applicants = freezed,
     Object? status = freezed,
     Object? acceptedApplicant = freezed,
+    Object? date = freezed,
     Object? workerReviewed = freezed,
     Object? employerReviewed = freezed,
   }) {
@@ -130,6 +133,10 @@ class _$JobCopyWithImpl<$Res> implements $JobCopyWith<$Res> {
           ? _value.acceptedApplicant
           : acceptedApplicant // ignore: cast_nullable_to_non_nullable
               as String?,
+      date: date == freezed
+          ? _value.date
+          : date // ignore: cast_nullable_to_non_nullable
+              as DateTime,
       workerReviewed: workerReviewed == freezed
           ? _value.workerReviewed
           : workerReviewed // ignore: cast_nullable_to_non_nullable
@@ -159,6 +166,7 @@ abstract class _$$_JobCopyWith<$Res> implements $JobCopyWith<$Res> {
       List<String>? applicants,
       String status,
       String? acceptedApplicant,
+      DateTime date,
       bool workerReviewed,
       bool employerReviewed});
 }
@@ -185,6 +193,7 @@ class __$$_JobCopyWithImpl<$Res> extends _$JobCopyWithImpl<$Res>
     Object? applicants = freezed,
     Object? status = freezed,
     Object? acceptedApplicant = freezed,
+    Object? date = freezed,
     Object? workerReviewed = freezed,
     Object? employerReviewed = freezed,
   }) {
@@ -233,6 +242,10 @@ class __$$_JobCopyWithImpl<$Res> extends _$JobCopyWithImpl<$Res>
           ? _value.acceptedApplicant
           : acceptedApplicant // ignore: cast_nullable_to_non_nullable
               as String?,
+      date: date == freezed
+          ? _value.date
+          : date // ignore: cast_nullable_to_non_nullable
+              as DateTime,
       workerReviewed: workerReviewed == freezed
           ? _value.workerReviewed
           : workerReviewed // ignore: cast_nullable_to_non_nullable
@@ -260,6 +273,7 @@ class _$_Job implements _Job {
       final List<String>? applicants,
       required this.status,
       this.acceptedApplicant,
+      required this.date,
       required this.workerReviewed,
       required this.employerReviewed})
       : _applicants = applicants;
@@ -298,13 +312,15 @@ class _$_Job implements _Job {
   @override
   final String? acceptedApplicant;
   @override
+  final DateTime date;
+  @override
   final bool workerReviewed;
   @override
   final bool employerReviewed;
 
   @override
   String toString() {
-    return 'Job(jobId: $jobId, title: $title, description: $description, posterUid: $posterUid, price: $price, photoUrl: $photoUrl, geoHash: $geoHash, locationAsName: $locationAsName, applicants: $applicants, status: $status, acceptedApplicant: $acceptedApplicant, workerReviewed: $workerReviewed, employerReviewed: $employerReviewed)';
+    return 'Job(jobId: $jobId, title: $title, description: $description, posterUid: $posterUid, price: $price, photoUrl: $photoUrl, geoHash: $geoHash, locationAsName: $locationAsName, applicants: $applicants, status: $status, acceptedApplicant: $acceptedApplicant, date: $date, workerReviewed: $workerReviewed, employerReviewed: $employerReviewed)';
   }
 
   @override
@@ -327,6 +343,7 @@ class _$_Job implements _Job {
             const DeepCollectionEquality().equals(other.status, status) &&
             const DeepCollectionEquality()
                 .equals(other.acceptedApplicant, acceptedApplicant) &&
+            const DeepCollectionEquality().equals(other.date, date) &&
             const DeepCollectionEquality()
                 .equals(other.workerReviewed, workerReviewed) &&
             const DeepCollectionEquality()
@@ -348,6 +365,7 @@ class _$_Job implements _Job {
       const DeepCollectionEquality().hash(_applicants),
       const DeepCollectionEquality().hash(status),
       const DeepCollectionEquality().hash(acceptedApplicant),
+      const DeepCollectionEquality().hash(date),
       const DeepCollectionEquality().hash(workerReviewed),
       const DeepCollectionEquality().hash(employerReviewed));
 
@@ -375,6 +393,7 @@ abstract class _Job implements Job {
       final List<String>? applicants,
       required final String status,
       final String? acceptedApplicant,
+      required final DateTime date,
       required final bool workerReviewed,
       required final bool employerReviewed}) = _$_Job;
 
@@ -403,6 +422,8 @@ abstract class _Job implements Job {
   @override // pending for inviting application
 // pending -> accepted ->  in progress -> paid -> completed
   String? get acceptedApplicant => throw _privateConstructorUsedError;
+  @override
+  DateTime get date => throw _privateConstructorUsedError;
   @override
   bool get workerReviewed => throw _privateConstructorUsedError;
   @override

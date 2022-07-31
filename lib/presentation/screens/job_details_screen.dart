@@ -5,6 +5,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:location/location.dart';
 import 'package:rating_dialog/rating_dialog.dart';
 import 'package:udanpani/core/colors.dart';
@@ -12,6 +13,7 @@ import 'package:udanpani/domain/models/job_model/job.dart';
 import 'package:udanpani/domain/models/review/review.dart';
 import 'package:udanpani/domain/models/user_model/user.dart' as udanpani;
 import 'package:udanpani/infrastructure/utils.dart';
+import 'package:udanpani/presentation/screens/show_profile.dart';
 import 'package:udanpani/services/firestore_service.dart';
 import 'package:udanpani/services/rest_services.dart';
 import 'package:udanpani/widgets/loadingwidget.dart';
@@ -264,16 +266,38 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
           const SizedBox(
             height: 10,
           ),
-          Text(
-            _jobPoster!.username,
-            textAlign: TextAlign.left,
-            style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+          ListTile(
+            shape: RoundedRectangleBorder(
+              side: const BorderSide(
+                  color: Color.fromARGB(187, 73, 73, 73), width: 1),
+              borderRadius: BorderRadius.circular(5),
+            ),
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          ShowProfileScreen(uid: _jobPoster!.uid!)));
+            },
+            title: Text(
+              _jobPoster!.username,
+              textAlign: TextAlign.left,
+              style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+            ),
+            leading: CircleAvatar(
+              foregroundImage: NetworkImage(_jobPoster!.profilePicture!),
+            ),
           ),
 
           const SizedBox(height: 20),
 
           Text(
-            "Expected wage: ₹${_job!.price}",
+            "Expected pay: ₹${_job!.price}",
+          ),
+          const SizedBox(height: 20),
+
+          Text(
+            "Work Expected by: " + DateFormat('d MMM, yyyy').format(_job!.date),
           ),
           const SizedBox(height: 20),
           Text(
@@ -545,7 +569,7 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
               : const Icon(Icons.clear),
         ],
         title: const Text("Job Details"),
-        backgroundColor: primaryColor.withOpacity(0.1),
+        backgroundColor: mobileBackgroundColor,
       ),
       body: _isLoading
           ? LoadingWidget()

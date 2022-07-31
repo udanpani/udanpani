@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +31,8 @@ class _AddNewJobScreenState extends State<AddNewJobScreen> {
   final _priceEditingController = TextEditingController();
   final _descriptionEditingController = TextEditingController();
   final _locEditingController = TextEditingController(text: "Searching");
+  final _dateEditingController =
+      TextEditingController(text: DateTime.now().toString());
   final List<TextEditingController> _controller =
       List.generate(5, (i) => TextEditingController());
 
@@ -51,7 +54,7 @@ class _AddNewJobScreenState extends State<AddNewJobScreen> {
   String jobName = "Other";
   String? dropdownValue;
   String? jobtype;
-  DateTime? _selectedDate;
+  DateTime _selectedDate = DateTime.now();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -74,6 +77,7 @@ class _AddNewJobScreenState extends State<AddNewJobScreen> {
     _priceEditingController.dispose();
     _descriptionEditingController.dispose();
     _locEditingController.dispose();
+    _dateEditingController.dispose();
     _mapController.dispose();
     for (var controller in _controller) {
       controller.dispose();
@@ -495,42 +499,39 @@ class _AddNewJobScreenState extends State<AddNewJobScreen> {
       return;
     }
 
-    setState(() {
-      _isLoading = true;
-    });
-
     if (_titleEditingController.text.isEmpty ||
         _priceEditingController.text.isEmpty) {
       showSnackBar("All marked fields are mandatory", context);
 
-      setState(() {
-        _isLoading = false;
-      });
       return;
     }
 
     if (_coordinates == null) {
       showSnackBar("Location could not be resolved", context);
 
-      setState(() {
-        _isLoading = false;
-      });
       return;
     }
 
     if (_file == null) {
       showSnackBar("No image selected", context);
 
-      setState(() {
-        _isLoading = false;
-      });
       return;
     }
+
+    if (_selectedDate == null) {
+      showSnackBar("No date selected", context);
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+    });
 
     String description = _makeDescription();
 
     String res = await FirestoreMethods().uploadNewJob(
       title: _titleEditingController.text,
+      date: _selectedDate!,
       description: description,
       price: _priceEditingController.text,
       coordinates: _coordinates!,
@@ -611,10 +612,36 @@ class _AddNewJobScreenState extends State<AddNewJobScreen> {
                     const SizedBox(height: 20),
                     TextFormInput(
                       textEditingController: _priceEditingController,
-                      hintText: "Expected Wage",
+                      hintText: "Expected Pay",
                       textInputType: TextInputType.number,
                       isNumber: true,
                     ),
+
+                    const SizedBox(height: 20),
+
+                    DateTimePicker(
+                        dateMask: 'yyyy-MM-d',
+                        controller: _dateEditingController,
+                        firstDate: DateTime.now(),
+                        lastDate: DateTime(2100),
+                        dateLabelText: 'Work Expected by',
+                        onChanged: (val) {
+                          if (val != null) {
+                            setState(() {
+                              _dateEditingController.text = val;
+                              _selectedDate = DateTime.parse(val);
+                            });
+                          }
+                        },
+                        onSaved: (val) {
+                          if (val != null) {
+                            setState(() {
+                              _dateEditingController.text = val;
+
+                              _selectedDate = DateTime.parse(val);
+                            });
+                          }
+                        }),
 
                     const SizedBox(height: 20),
 

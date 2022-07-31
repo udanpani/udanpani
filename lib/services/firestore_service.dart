@@ -21,6 +21,7 @@ class FirestoreMethods {
     required Coordinates coordinates,
     required Uint8List photo,
     required String price,
+    required DateTime date,
     String? uid,
   }) async {
     String res = "Something went wrong";
@@ -47,6 +48,7 @@ class FirestoreMethods {
         title: title,
         description: description,
         price: price,
+        date: date,
         posterUid: posterUid,
         geoHash: myLocation.data,
         locationAsName: locationAsName,
@@ -446,7 +448,7 @@ class FirestoreMethods {
     try {
       var doc = await _firestore
           .collection('users')
-          .where("username", isEqualTo: username)
+          .where("username", isEqualTo: username.toLowerCase())
           .get();
       if (doc.docs.isNotEmpty) {
         return true;
