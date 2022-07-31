@@ -1,9 +1,10 @@
 import 'dart:typed_data';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:udanpani/core/colors.dart';
-import 'package:udanpani/domain/models/user_model/user.dart';
+import 'package:udanpani/domain/models/user_model/user.dart' as udanpani;
 import 'package:udanpani/infrastructure/utils.dart';
 import 'package:udanpani/presentation/screens/auth_pages/otp.dart';
 import 'package:udanpani/services/auth_methods.dart';
@@ -63,6 +64,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
     }
     String phoneNumber = "+91" + _phoneEditingController.text.trim();
 
+    if (!RegExp(
+            r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
+        .hasMatch(_emailEditingController.text)) {
+      showSnackBar("Invalid email", context);
+      return;
+    }
+
     if (_image == null) {
       showSnackBar("No Image selected", context);
       return;
@@ -83,14 +91,36 @@ class _SignUpScreenState extends State<SignUpScreen> {
       return;
     }
 
-    bool? phoneValidated = await Navigator.push(
+    bool isEmailAlreadyRegistered = await FirestoreMethods()
+        .checkForEmail(_emailEditingController.text.trim());
+    if (isEmailAlreadyRegistered) {
+      showSnackBar("Email already in use", context);
+
+      setState(() {
+        _isLoading = false;
+      });
+      return;
+    }
+
+    bool isUsernameAlreadyRegistered = await FirestoreMethods()
+        .checkForUsername(_usernameEditingController.text.trim());
+    if (isUsernameAlreadyRegistered) {
+      showSnackBar("Username already in use", context);
+
+      setState(() {
+        _isLoading = false;
+      });
+      return;
+    }
+
+    UserCredential? userCredential = await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => OTPScreen(phoneNumber),
+        builder: (context) => OTPScreen(phoneNumber, isSignUp: true),
       ),
     );
 
-    if (phoneValidated == null || !phoneValidated) {
+    if (userCredential == null) {
       showSnackBar("OTP Verification failed", context);
 
       setState(() {
@@ -101,7 +131,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     }
 
     String res = await AuthMethods().signUpUser(
-      user: User(
+      user: udanpani.User(
         name: _nameEditingController.text,
         username: _usernameEditingController.text,
         email: _emailEditingController.text.trim(),
@@ -110,6 +140,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         noOfReviews: 0,
         reviews: [],
       ),
+      cred: userCredential,
       password: _passwordEditingController.text,
       file: _image,
     );
@@ -200,13 +231,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     textInputType: TextInputType.emailAddress,
                   ),
                   const SizedBox(height: 10),
-                  TextFormInput(
-                    textEditingController: _passwordEditingController,
-                    hintText: "Password",
-                    textInputType: TextInputType.text,
-                    isPass: true,
-                  ),
-                  const SizedBox(height: 10),
+                  //  TextFormInput(
+                  //    textEditingController: _passwordEditingController,
+                  //    hintText: "Password",
+                  //    textInputType: TextInputType.text,
+                  //    isPass: true,
+                  //  ),
+                  //  const SizedBox(height: 10),
                   ElevatedButton(
                     onPressed: _signUpUser,
                     child: _isLoading
