@@ -135,11 +135,19 @@ class _ShowProfileScreenState extends State<ShowProfileScreen> {
                   ),
                   Text(_user!.name),
                   const SizedBox(
+                    height: 10,
+                  ),
+                  Text("Verification: " + _user!.verifications!),
+                  const SizedBox(
                     height: 30,
                   ),
                   _buildStars(_user!.rating!),
                   const SizedBox(
                     height: 30,
+                  ),
+                  Text("REVIEWS"),
+                  const SizedBox(
+                    height: 10,
                   ),
                   Expanded(
                     child: _buildReviews(),

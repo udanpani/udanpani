@@ -21,7 +21,8 @@ class AuthMethods {
       {required model.User user,
       required String password,
       required UserCredential cred,
-      Uint8List? file}) async {
+      required Uint8List addressProof,
+      required Uint8List file}) async {
     String res = "Some error occured";
 
     try {
@@ -30,12 +31,21 @@ class AuthMethods {
 
       String photoUrl = await StorageMethods().uploadImageToStorage(
         'profilePics',
-        file!,
+        file,
+      );
+
+      String proofUrl = await StorageMethods().uploadImageToStorage(
+        'addressProofs',
+        addressProof,
+        suffix: user.verifications!,
       );
 
       await _firestore.collection('users').doc(cred.user!.uid).set(
             user
-                .copyWith(uid: cred.user!.uid, profilePicture: photoUrl)
+                .copyWith(
+                    uid: cred.user!.uid,
+                    profilePicture: photoUrl,
+                    addressProof: proofUrl)
                 .toJson(),
           );
 

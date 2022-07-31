@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:intl/intl.dart';
 import 'package:rating_dialog/rating_dialog.dart';
 import 'package:udanpani/core/colors.dart';
 import 'package:udanpani/domain/models/job_model/job.dart';
@@ -348,9 +349,13 @@ class _JobActionsState extends State<JobActions> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Manage Job"),
+        backgroundColor: mobileBackgroundColor,
         actions: [
           (widget.job.status == "pending")
-              ? IconButton(onPressed: () {}, icon: const Icon(Icons.edit))
+              ? const Icon(
+                  Icons.edit,
+                  color: mobileBackgroundColor,
+                )
               : Container(
                   padding: EdgeInsets.all(20),
                   child: Text(widget.job.status.toUpperCase())),
@@ -382,9 +387,14 @@ class _JobActionsState extends State<JobActions> {
               ),
               const SizedBox(height: 10),
               Text(
-                "Expected wage: ₹${widget.job.price}",
+                "Expected pay: ₹${widget.job.price}",
               ),
               const SizedBox(height: 10),
+              Text(
+                "Work Expected by: " +
+                    DateFormat('d MMM, yyyy').format(widget.job.date),
+              ),
+              const SizedBox(height: 20),
               Text(
                 widget.job.description,
               ),

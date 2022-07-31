@@ -97,7 +97,8 @@ class _JobsListedState extends State<JobsListed> {
                   IconButton(
                     onPressed: () {},
                     splashRadius: 1,
-                    icon: const Icon(Icons.history),
+                    icon:
+                        const Icon(Icons.history, color: mobileBackgroundColor),
                   )
                 ],
               ),

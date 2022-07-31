@@ -18,6 +18,7 @@ class Job with _$Job {
     required String status, // pending for inviting application
     // pending -> accepted ->  in progress -> paid -> completed
     String? acceptedApplicant,
+    required DateTime date,
     required bool workerReviewed,
     required bool employerReviewed,
   }) = _Job;

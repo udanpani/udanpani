@@ -84,6 +84,7 @@ class _OTPScreenState extends State<OTPScreen> {
             (route) => false);
       }
     } else {
+      if (!mounted) return;
       showSnackBar(res, context);
       return;
     }

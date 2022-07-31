@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:udanpani/core/colors.dart';
+import 'package:udanpani/core/constants.dart';
 import 'package:udanpani/domain/models/user_model/user.dart' as udanpani;
 import 'package:udanpani/infrastructure/utils.dart';
 import 'package:udanpani/presentation/screens/auth_pages/otp.dart';
@@ -27,7 +28,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _phoneEditingController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   Uint8List? _image;
+  Uint8List? _addressProof;
   bool _isLoading = false;
+  String? _verification;
 
   @override
   void dispose() {
@@ -46,6 +49,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
       if (im != null) {
         _image = im;
       }
+    });
+  }
+
+  Future<void> _uploadAddressProof() async {
+    Uint8List? im = await pickImage(ImageSource.camera);
+
+    setState(() {
+      _addressProof = im;
     });
   }
 
@@ -73,6 +84,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
     if (_image == null) {
       showSnackBar("No Image selected", context);
+      return;
+    }
+
+    if (_addressProof == null) {
+      showSnackBar("No address proof uploaded", context);
+      return;
+    }
+
+    if (_verification == null) {
+      showSnackBar("Select an address proof", context);
       return;
     }
 
@@ -133,16 +154,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
     String res = await AuthMethods().signUpUser(
       user: udanpani.User(
         name: _nameEditingController.text,
-        username: _usernameEditingController.text,
+        username: _usernameEditingController.text.trim().toLowerCase(),
         email: _emailEditingController.text.trim(),
         phoneNumber: phoneNumber,
+        verifications: _verification,
         rating: 0,
         noOfReviews: 0,
         reviews: [],
       ),
       cred: userCredential,
       password: _passwordEditingController.text,
-      file: _image,
+      file: _image!,
+      addressProof: _addressProof!,
     );
 
     setState(() {
@@ -231,6 +254,33 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     textInputType: TextInputType.emailAddress,
                   ),
                   const SizedBox(height: 10),
+
+                  DropdownButton<String>(
+                    value: _verification,
+                    hint: const Text('Select Address Proof'),
+                    underline: Container(),
+                    icon: const Icon(Icons.arrow_downward),
+                    iconSize: 18.0, // can be changed, default: 24.0
+                    iconEnabledColor: Colors.white,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        _verification = newValue!;
+                      });
+                    },
+                    items: verificationListDropdownMenuItems,
+                  ),
+                  const SizedBox(height: 10),
+
+                  ElevatedButton(
+                      onPressed: () {
+                        _uploadAddressProof();
+                      },
+                      child: Text(_addressProof == null
+                          ? "Upload Address Proof"
+                          : "Uploaded")),
+
+                  const SizedBox(height: 10),
+
                   //  TextFormInput(
                   //    textEditingController: _passwordEditingController,
                   //    hintText: "Password",

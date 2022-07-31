@@ -20,6 +20,7 @@ _$_Job _$$_JobFromJson(Map<String, dynamic> json) => _$_Job(
           .toList(),
       status: json['status'] as String,
       acceptedApplicant: json['acceptedApplicant'] as String?,
+      date: DateTime.parse(json['date'] as String),
       workerReviewed: json['workerReviewed'] as bool,
       employerReviewed: json['employerReviewed'] as bool,
     );
@@ -36,6 +37,7 @@ Map<String, dynamic> _$$_JobToJson(_$_Job instance) => <String, dynamic>{
       'applicants': instance.applicants,
       'status': instance.status,
       'acceptedApplicant': instance.acceptedApplicant,
+      'date': instance.date.toIso8601String(),
       'workerReviewed': instance.workerReviewed,
       'employerReviewed': instance.employerReviewed,
     };

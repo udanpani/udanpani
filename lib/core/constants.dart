@@ -84,3 +84,14 @@ List<DropdownMenuItem<String>> electronicListDropdownMenuItems = <String>[
     child: Text(value),
   );
 }).toList();
+
+List<DropdownMenuItem<String>> verificationListDropdownMenuItems = <String>[
+  'Aadhar',
+  'Driver\'s License',
+  'Pan card',
+].map<DropdownMenuItem<String>>((String value) {
+  return DropdownMenuItem<String>(
+    value: value,
+    child: Text(value),
+  );
+}).toList();
