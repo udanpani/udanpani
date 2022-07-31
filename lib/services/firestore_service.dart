@@ -442,6 +442,38 @@ class FirestoreMethods {
     return res;
   }
 
+  Future<bool> checkForUsername(String username) async {
+    try {
+      var doc = await _firestore
+          .collection('users')
+          .where("username", isEqualTo: username)
+          .get();
+      if (doc.docs.isNotEmpty) {
+        return true;
+      }
+
+      return false;
+    } catch (e) {
+      return true;
+    }
+  }
+
+  Future<bool> checkForEmail(String email) async {
+    try {
+      var doc = await _firestore
+          .collection('users')
+          .where("email", isEqualTo: email)
+          .get();
+      if (doc.docs.isNotEmpty) {
+        return true;
+      }
+
+      return false;
+    } catch (e) {
+      return true;
+    }
+  }
+
   Future<bool> checkForPhone(String phoneNumber) async {
     try {
       var doc = await _firestore

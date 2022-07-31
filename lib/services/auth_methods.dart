@@ -20,12 +20,13 @@ class AuthMethods {
   Future<String> signUpUser(
       {required model.User user,
       required String password,
+      required UserCredential cred,
       Uint8List? file}) async {
     String res = "Some error occured";
 
     try {
-      UserCredential cred = await _auth.createUserWithEmailAndPassword(
-          email: user.email, password: password);
+      // UserCredential cred = await _auth.createUserWithEmailAndPassword(
+      //     email: user.email, password: password);
 
       String photoUrl = await StorageMethods().uploadImageToStorage(
         'profilePics',
@@ -56,21 +57,20 @@ class AuthMethods {
     return res;
   }
 
-  Future<String> loginUser({
-    required String email,
-    required String password,
+  Future<List> loginUser({
+    required PhoneAuthCredential credential,
   }) async {
     String res = "Some error occured";
-
+    UserCredential? cred;
     try {
-      await _auth.signInWithEmailAndPassword(email: email, password: password);
+      cred = await _auth.signInWithCredential(credential);
       res = "success";
     } on FirebaseAuthException catch (fberror) {
       res = fberror.code;
     } catch (err) {
       res = err.toString();
     }
-    return res;
+    return [res, cred];
   }
 
   Future<String> signoutUser() async {

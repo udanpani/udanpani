@@ -1,7 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:udanpani/core/colors.dart';
 import 'package:udanpani/infrastructure/utils.dart';
+import 'package:udanpani/presentation/screens/auth_pages/otp.dart';
 import 'package:udanpani/services/auth_methods.dart';
+import 'package:udanpani/services/firestore_service.dart';
 import 'package:udanpani/widgets/text_input_field.dart';
 import 'package:udanpani/widgets/textforminput.dart';
 
@@ -13,14 +16,14 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final _emailEditingController = TextEditingController();
+  final _phoneEditingController = TextEditingController();
   final _passwordEditingController = TextEditingController();
   bool _isLoading = false;
   final _formKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
-    _emailEditingController.dispose();
+    _phoneEditingController.dispose();
     _passwordEditingController.dispose();
     super.dispose();
   }
@@ -30,23 +33,53 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     }
 
+    if (_phoneEditingController.text.trim().length != 10) {
+      showSnackBar("Invalid phone number", context);
+      return;
+    }
+
+    String phoneNumber = "+91" + _phoneEditingController.text.trim();
+
     setState(() {
       _isLoading = true;
     });
 
-    String res = await AuthMethods().loginUser(
-      email: _emailEditingController.text.trim(),
-      password: _passwordEditingController.text,
-    );
+    bool isRegistered = await FirestoreMethods().checkForPhone(phoneNumber);
+    if (!isRegistered) {
+      setState(() {
+        _isLoading = false;
+      });
+      showSnackBar("No such user, please sign up", context);
+      return;
+    }
+
+    PhoneAuthCredential _phoneCred = await Navigator.push(context,
+        MaterialPageRoute(builder: (context) => OTPScreen(phoneNumber)));
+
+    // if not verified
+    if (_phoneCred == null) {
+      showSnackBar("Cannot validate", context);
+
+      setState(() {
+        _isLoading = false;
+      });
+
+      return;
+    }
+
+    // String res = await AuthMethods().loginUser(
+    //   credential: _phoneCred,
+    // );
+
     setState(() {
       _isLoading = false;
     });
 
-    if (res == 'success') {
-      Navigator.pushReplacementNamed(context, '/home');
-    } else {
-      showSnackBar(res, context);
-    }
+    //if (res == 'success') {
+    //  Navigator.pushReplacementNamed(context, '/home');
+    //} else {
+    //  showSnackBar(res, context);
+    //}
   }
 
   void _navigateToSignup() {
@@ -63,6 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Form(
             key: _formKey,
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 //todo logo
@@ -72,17 +106,27 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
 
                 TextFormInput(
-                    textEditingController: _emailEditingController,
-                    hintText: "Email",
-                    textInputType: TextInputType.emailAddress),
-
-                TextFormInput(
-                  textEditingController: _passwordEditingController,
-                  hintText: "Password",
-                  textInputType: TextInputType.text,
-                  isPass: true,
+                  textEditingController: _phoneEditingController,
+                  prefix: const Padding(
+                    padding: EdgeInsets.all(4),
+                    child: Text(
+                      "+91",
+                    ),
+                  ),
+                  hintText: "Phone",
+                  textInputType: TextInputType.number,
+                  isNumber: true,
                 ),
 
+                //  TextFormInput(
+                //    textEditingController: _passwordEditingController,
+                //    hintText: "Password",
+                //    textInputType: TextInputType.text,
+                //    isPass: true,
+                //  ),
+                SizedBox(
+                  height: 20,
+                ),
                 ElevatedButton(
                   onPressed: _loginUser,
                   child: _isLoading
